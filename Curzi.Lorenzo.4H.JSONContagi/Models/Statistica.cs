@@ -8,8 +8,8 @@ namespace Curzi.Lorenzo._4H.JSONContagi.Models
 {
     class Statistica
     {
-        //vettore che conterrà tutti i valori deserializzati dal file Json
-        Contagio[] statistiche;
+        //lista che conterrà tutti i valori deserializzati dal file Json
+        List<Contagio> statistiche = new List<Contagio>();
 
         public Statistica() 
         {
@@ -22,21 +22,21 @@ namespace Curzi.Lorenzo._4H.JSONContagi.Models
             string json = sr.ReadToEnd(); //leggo tutti i contenuti del file json
             sr.Close();
 
-            statistiche = JsonConvert.DeserializeObject<Contagio[]>(json); //deserializzo il file json e aggiungo i valori all'array statistiche 
+            statistiche.AddRange(JsonConvert.DeserializeObject<Contagio[]>(json)); //deserializzo il file json e aggiungo i valori alla lista
         }
 
         //metodo che ricerca il giorno con più contagi all'interno dell'array 
         public string MassimoContagi()
         {
-            string date = statistiche[1].Data; //data del giorno con più contagi
-            double maxContagi = statistiche[1].Contagi; //numero massimo di contagi registrati
+            DateTime date = statistiche[0].Data; //data del giorno con più contagi
+            double maxContagi = statistiche[0].Contagi; //numero massimo di contagi registrati
 
-            for (int i = 2; i < statistiche.Length; i++) 
+            foreach(var s in statistiche)
             {
-                if (statistiche[i].Contagi > maxContagi) //controllo se vi sono stati giorni con più contagi registrati
+                if (s.Contagi > maxContagi) //controllo se vi sono stati giorni con più contagi registrati
                 {
-                    maxContagi = statistiche[i].Contagi;
-                    date = statistiche[i].Data;
+                    maxContagi = s.Contagi;
+                    date = s.Data;
                 }
             }
 
@@ -47,20 +47,44 @@ namespace Curzi.Lorenzo._4H.JSONContagi.Models
         //metodo che restituisce il giorno con meno contagi
         public string MinimoContagi()
         {
-            string date = statistiche[1].Data; //data del giorno con meno contagi
+            DateTime date = statistiche[1].Data; //data del giorno con meno contagi
             double minContagi = statistiche[1].Contagi; //numero minimo di contagi registrati
 
-            for (int i = 2; i < statistiche.Length; i++)
+            foreach (var s in statistiche)
             {
-                if (statistiche[i].Contagi < minContagi) //controllo se vi sono stati giorni con meno contagi registrati
+                if (s.Contagi < minContagi) //controllo se vi sono stati giorni con meno contagi registrati
                 {
-                    minContagi = statistiche[i].Contagi;
-                    date = statistiche[i].Data;
+                    minContagi = s.Contagi;
+                    date = s.Data;
                 }
             }
 
             return $"\nIl giorno con meno contagi è: \t\t{date}" +
                 $"\nI contagi registrati sono stati: \t{minContagi}";
+        }
+
+        //Metodo per calcolare i contagi dei un giorno della settimana
+        public string CalcolaContagiGiorbalieri(DayOfWeek dayOfWeek)
+        {
+            string retVal = "É stato inserito un giorno sbagliato.";
+            double media = 0;
+            int day = 0; //calcolo i giorni della settimana presenti nella lista
+
+            foreach(var s in statistiche)
+            {
+                if(s.Data.DayOfWeek == dayOfWeek)
+                {
+                    media += s.Contagi;
+                    day++;
+                }
+            }
+
+            //calcolo la media del giorno
+            media /= day;
+
+            retVal = $"La media dei contagi registrati nel giorno {dayOfWeek} è:\t{Math.Round(media, 2)}";
+
+            return retVal;
         }
 
         public override string ToString()

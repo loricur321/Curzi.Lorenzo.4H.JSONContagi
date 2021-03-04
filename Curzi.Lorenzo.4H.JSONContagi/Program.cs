@@ -16,12 +16,22 @@ namespace Curzi.Lorenzo._4H.JSONContagi
 
             Statistica statistiche = new Statistica("ContagiRimini.json");
 
+            //Console.WriteLine(statistiche);
+
             Console.WriteLine("\nRicerca del giorno con più contagi...");
             Console.WriteLine(statistiche.MassimoContagi());
 
             Console.WriteLine("\nRicerca del giorno con meno contagi...");
             Console.WriteLine("(Escluso il primo)");
             Console.WriteLine(statistiche.MinimoContagi());
+
+            Console.WriteLine("\n" + statistiche.CalcolaContagiGiorbalieri(DayOfWeek.Monday));
+            Console.WriteLine(statistiche.CalcolaContagiGiorbalieri(DayOfWeek.Tuesday));
+            Console.WriteLine(statistiche.CalcolaContagiGiorbalieri(DayOfWeek.Wednesday));
+            Console.WriteLine(statistiche.CalcolaContagiGiorbalieri(DayOfWeek.Thursday));
+            Console.WriteLine(statistiche.CalcolaContagiGiorbalieri(DayOfWeek.Friday));
+            Console.WriteLine(statistiche.CalcolaContagiGiorbalieri(DayOfWeek.Saturday));
+            Console.WriteLine(statistiche.CalcolaContagiGiorbalieri(DayOfWeek.Sunday));
         }
     }
 }

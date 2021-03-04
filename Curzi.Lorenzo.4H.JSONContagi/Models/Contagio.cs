@@ -6,11 +6,11 @@ namespace Curzi.Lorenzo._4H.JSONContagi.Models
 {
     class Contagio
     {
-        string _data;
+        DateTime _data;
         int _progressivo;
         double _contagi;
 
-        public string Data 
+        public DateTime Data 
         {
             get => _data;
             set => _data = value;
@@ -30,7 +30,7 @@ namespace Curzi.Lorenzo._4H.JSONContagi.Models
 
         public Contagio() { }
 
-        public Contagio(string data, int counter, double contagi)
+        public Contagio(DateTime data, int counter, double contagi)
         {
             Data = data;
             Progressivo = counter;
